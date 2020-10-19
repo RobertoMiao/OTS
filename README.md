@@ -1,4 +1,4 @@
-# Object-to-Scene: Learning to Transfer Object Knowledge to Indoor Scene Representation
+# Object-to-Scene: Learning to Transfer Object Knowledge to Indoor Scene Recognition
 
 This document provides a brief description for Object-to-Scene (OTS) codes.
 
