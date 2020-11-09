@@ -109,7 +109,8 @@ class cls_model(object):
         pbar = tqdm(total=len(self.test_data))
         for batch_data in self.test_data:
             batch_data = batch_data[0]
-            segSize = (batch_data['img_ori'].shape[0], batch_data['img_ori'].shape[1])
+            # segSize = (batch_data['img_ori'].shape[0], batch_data['img_ori'].shape[1])
+            segSize = (256, 256)
             img_resized_list = batch_data['img_data']
             true_label = batch_data['info'].split('/')[-2]
             object_feature = self.get_object_feature(segSize, img_resized_list, batch_data)
