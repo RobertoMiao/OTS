@@ -14,13 +14,13 @@ os.environ["CUDA_VISIBLE_DEVICES"]="0"
 logging.basicConfig(level=logging.DEBUG)
 logging.info('current time is {}'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 
-class cls_model(object):
+class main(object):
     def __init__(self, cfg, args):
         self.classes, self.classes_num = load_classes(args.cls_file)
         self.seg_model = load_seg_module(cfg)
         self.test_data = load_test_data(cfg)
-        self.obj_model = OPAM_Small_Cat_Double_Module(1024, 150).cuda().eval()
-        self.classifier = Classifier(self.classes_num, 2048).cuda().eval()
+        self.obj_model = OAM_GRAM(in_dim=1024, one_hot_cls_num=150).cuda().eval()
+        self.classifier = Classifier(num_classes=self.classes_num, in_dim=2048).cuda().eval()
         if args.ckpt:
             self.obj_model, self.classifier = \
                 load_checkpoint(args.ckpt, self.obj_model, self.classifier)
@@ -146,5 +146,5 @@ if __name__ == '__main__':
     #cfg.freeze()
 
     # test part
-    model = cls_model(cfg, args)
+    model = main(cfg, args)
     model.test()

@@ -3,19 +3,19 @@ from torch import nn
 from torch.nn import Module, Conv2d, Parameter, Softmax
 
 # OPM适用于obj pair; OPAM适用于attention
-_all__ = ["msra", "Attn_Module", "OPAM_Small_Cat_Double_Module", "Classifier"]
+_all__ = ["weight_init", "Obj_Attn_Block", "OAM_GRAM", "Classifier"]
     
 
-def msra(module: nn.Module) -> None:
+def weight_init(module: nn.Module) -> None:
     nn.init.kaiming_normal_(module.weight, mode="fan_out", nonlinearity="relu")
     if module.bias is not None:  # pyre-ignore
         nn.init.constant_(module.bias, 0)
 
 
-class Attn_Module(Module):
+class Obj_Attn_Block(Module):
     def __init__(self, in_dim, compress):
-        super(Attn_Module, self).__init__()
-        channel_in = in_dim//compress
+        super(Obj_Attn_Block, self).__init__()
+        channel_in = in_dim//int(2*compress)
         self.value_conv = Conv2d(in_channels=in_dim, out_channels=channel_in, kernel_size=1)
         self.query_conv = Conv2d(in_channels=channel_in, out_channels=channel_in, kernel_size=1)
         self.key_conv = Conv2d(in_channels=channel_in, out_channels=channel_in, kernel_size=1)
@@ -23,7 +23,7 @@ class Attn_Module(Module):
         self.softmax = Softmax(dim=-1)
 
         for layer in [self.value_conv, self.query_conv, self.key_conv]:
-            msra(layer)
+            weight_init(layer)
 
     def forward(self, x):
         m_batchsize, C, length,  _ = x.size()
@@ -38,11 +38,11 @@ class Attn_Module(Module):
         return x
 
 
-class OPAM_Small_Cat_Double_Module(Module):
+class OAM_GRAM(Module):
     def __init__(self, in_dim, one_hot_cls_num):
-        super(OPAM_Small_Cat_Double_Module, self).__init__()
-        self.attn1 = Attn_Module(in_dim, 4)
-        self.attn2 = Attn_Module(in_dim//2, 1)
+        super(OAM_GRAM, self).__init__()
+        self.attn1 = Obj_Attn_Block(in_dim, 2)
+        self.attn2 = Obj_Attn_Block(in_dim//2, 0.5)
         self.depth_conv = nn.Conv2d(in_channels=in_dim,
                                     out_channels=in_dim,
                                     kernel_size=(one_hot_cls_num, 1),
@@ -54,7 +54,7 @@ class OPAM_Small_Cat_Double_Module(Module):
         self.relu = nn.ReLU(inplace=True)
 
         for layer in [self.depth_conv, self.point_conv]:
-            msra(layer)
+            weight_init(layer)
 
     def forward(self, x):
         x = self.attn1(x)
@@ -68,9 +68,9 @@ class OPAM_Small_Cat_Double_Module(Module):
 
 
 class Classifier(nn.Module):
-    def __init__(self, num_classes, hidden_num):
+    def __init__(self, num_classes, in_dim):
         super(Classifier, self).__init__()
-        self.fc = nn.Linear(hidden_num, num_classes)
+        self.fc = nn.Linear(in_dim, num_classes)
         nn.init.normal_(self.fc.weight, std=0.01)
 
     def forward(self, x):
