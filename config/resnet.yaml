@@ -10,8 +10,8 @@ DATASET:
   random_flip: True
 
 MODEL:
-  weights_encoder: "./ade20k-resnet50/encoder_epoch_20.pth"
-  weights_decoder: "./ade20k-resnet50/decoder_epoch_20.pth"
+  weights_encoder: "./ckpt/encoder_epoch_20.pth"
+  weights_decoder: "./ckpt/decoder_epoch_20.pth"
   arch_encoder: "resnet50dilated"
   arch_decoder: "ppm"
   fc_dim: 2048
