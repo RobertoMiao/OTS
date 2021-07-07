@@ -8,12 +8,23 @@ This repository contains the source code (PyTorch) for our paper:
 
 
 ## Citation
+If you find the paper, code, or pre-trained models useful, please cite the following papers:
+
 ```
-@InProceedings{OTS21,
-  author     = "Bo Miao and Liguang Zhou and Ajmal Mian and Tin Lun Lam and Yangsheng Xu",
-  title      = "Object-to-Scene: Learning to Transfer Object Knowledge to Indoor Scene Recognition",
-  booktitle  = "IEEE/RSJ International Conference on Intelligent Robots and Systems",
-  year       = "2021",
+@InProceedings{Miao2021ots,
+  author    = {Bo Miao and Liguang Zhou and Ajmal Mian and Tin Lun Lam and Yangsheng Xu},
+  title     = {Object-to-Scene: Learning to Transfer Object Knowledge to Indoor Scene Recognition},
+  booktitle = {2021 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+  year      = {2021},
+  organization={IEEE}
+}
+
+@InProceedings{Zhou21borm,
+  author     = {Liguang Zhou and Cen Jun and Xingchao Wang and Zhenglong Sun and Tin Lun Lam and Yangsheng Xu},
+  title      = {BORM: Bayesian Object Relation Model for Indoor Scene Recognition},
+  booktitle  = {IEEE/RSJ International Conference on Intelligent Robots and Systems},
+  year       = {2021},
+  organization={IEEE}
 }
 ```
 
